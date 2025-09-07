@@ -1,0 +1,2295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apology Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      background: linear-gradient(180deg, #f9fbff, #fff3f8);
+      font-family: 'Arial', sans-serif;
+      color: #6a1b9a;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin: 0 0 10px 0;
+      color: #b83280;
+      font-weight: bold;
+    }
+
+    p {
+      font-size: 20px;
+      margin: 0 0 40px 0;
+    }
+
+    .card {
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 700px;
+      width: 95%;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      text-align: center;
+      margin: 0 auto 40px auto;
+      position: relative;
+    }
+
+    /* Apology Box */
+    .box {
+      background: #ffe6f2;
+      border: 1px solid #f8cde1;
+    }
+    .icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 15px auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .box h2 { color: #a0126a; }
+    .box button {
+      margin-top: 10px;
+      padding: 12px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      background: #ff66b3;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .box button:hover { background: #ff3385; transform: scale(1.05); }
+
+    /* Songs Section (Blue) */
+    .songs {
+      background: #f4faff;
+      border: 1px solid #dbeaff;
+    }
+    .songs-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 15px auto;
+      color: #3b6cff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .songs h2 { color: #3b6cff; }
+
+    /* Songs Section (Yellow) */
+    .songs-yellow {
+      background: #fffbe6;
+      border: 1px solid #ffe680;
+    }
+    .songs-yellow .songs-icon { color: #e6b800; }
+    .songs-yellow h2 { color: #e6b800; }
+    .songs-yellow .song-header button { color: #e6b800; }
+    .songs-yellow .toggle-all { background: #e6b800; }
+    .songs-yellow .toggle-all:hover { background: #cc9900; }
+
+    /* Song items */
+    .song-item {
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+      text-align: left;
+    }
+    .song-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .song-header span { font-size: 16px; color: #333; }
+    .song-header button {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .song-header button:hover { transform: scale(1.2); }
+
+    .progress-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+    .progress-container input[type="range"] {
+      flex-grow: 1;
+      appearance: none;
+      height: 4px;
+      background: #d0d8ff;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .progress-container input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 10px;
+      height: 10px;
+      background: #3b6cff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    /* Control button */
+    .toggle-all {
+      margin-top: 10px;
+      padding: 10px 24px;
+      border-radius: 25px;
+      border: none;
+      background: #3b6cff;
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .toggle-all:hover { background: #2955cc; }
+
+    /* Popup */
+    .overlay {
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(6px);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity 0.6s ease-in-out;
+      z-index:5;
+    }
+    .overlay.show { opacity:1; pointer-events:auto; }
+
+    .popup {
+  position: fixed;
+  top:50%; 
+  left:50%;
+  transform: translate(-50%,-50%);
+  width:90%;          /* takes more space horizontally */
+  max-width:600px;    /* wider rectangle */
+  background:#fff0f8;
+  border-radius:4px;  /* very light curve */
+  padding:20px 30px;
+  text-align:center;
+  display:none;
+  z-index:10;
+  opacity:0;
+}
+
+
+
+    .popup.show { display:block; animation: fadeInPopup 0.8s forwards ease-in-out; }
+    .popup.hide { animation: fadeOutPopup 0.6s forwards ease-in-out; }
+
+    @keyframes fadeInPopup {
+      from {opacity:0; transform:translate(-50%,-45%);}
+      to {opacity:1; transform:translate(-50%,-50%);}
+    }
+    @keyframes fadeOutPopup {
+      from {opacity:1; transform:translate(-50%,-50%);}
+      to {opacity:0; transform:translate(-50%,-45%);}
+    }
+
+    .popup h2 { font-size:22px; margin-bottom:15px; color:#ff4d88; font-weight:bold; }
+    .letter-box {
+  background:#fff;
+  border-radius:4px;
+  padding:15px;
+  text-align:center;
+  font-size:14px;
+  line-height:1.5;
+  white-space: pre-line;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+}
+
+
+    .signature {
+      margin-top:20px;
+      text-align:right;
+      font-size:16px;
+    }
+    .signature .love { color:#8a2be2; font-weight:bold; font-size:18px; }
+    .signature .name { color:#ff3399; margin-top:5px; font-size:15px; }
+    .signature .icons { margin-top:10px; font-size:18px; color:#ff4d88; }
+    .close-btn {
+      position:absolute;
+      top:10px; right:15px;
+      font-size:20px;
+      background:none;
+      border:none;
+      cursor:pointer;
+      color:#444;
+      font-weight:bold;
+    }
+    /* Memories Box */
+/* Memories Box (Green Theme) */
+.memories {
+  background: #e8f9f0;
+  border: 1px solid #a5e6c4;
+}
+.memories-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  color: #2e7d32;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.memories h2 {
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: #2e7d32;
+}
+.memories p {
+  font-size: 16px;
+  margin-bottom: 25px;
+  color: #444;
+}
+.memories button {
+  margin-top: 10px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 25px;
+  background: #2e7d32;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.memories button:hover {
+  background: #1b5e20;
+  transform: scale(1.05);
+}
+
+/* Popup for Memories */
+#memoriesPopup {
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  width:60%;          /* even smaller */
+  max-width:250px;    /* tiny popup */
+  background:#f6fff9;
+  border-radius:12px;
+  padding:12px;
+  text-align:center;
+  display:none;
+  z-index:20;
+  opacity:0;
+}
+
+#memoryImage {
+  max-width: 180px;   /* shrink image further */
+  border-radius: 8px;
+}
+.memories-controls button {
+  padding:6px 12px;   /* smaller*
+
+#memoryImage {
+  max-width: 220px;   /* keep image inside small box */
+  border-radius: 10px;
+}
+
+
+
+#memoriesPopup.show {
+  display: block;
+  animation: fadeInPopup 0.8s forwards ease-in-out;
+}
+#memoriesPopup.hide {
+  animation: fadeOutPopup 0.6s forwards ease-in-out;
+}
+
+
+/* Fade effect for images */
+#memoryImage {
+  max-width: 100%;
+  border-radius: 12px;
+  margin: 15px 0;
+  opacity: 1;
+  transition: opacity 0.6s ease-in-out;
+}
+#memoryImage.fade-out {
+  opacity: 0;
+}
+
+.memories-controls {
+  display:flex;
+  justify-content:space-between;
+  margin-top:15px;
+}
+.memories-controls button {
+  padding: 10px 20px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  background:#2e7d32;
+  color:#fff;
+  font-weight:bold;
+}
+.memories-controls button:hover {
+  background:#1b5e20;
+}
+
+/* Shayri Section (Brown Theme) */
+.shayri {
+  background: #fdf6f0;              /* light cream background */
+  border: 1px solid #d2b48c;        /* tan border */
+}
+.shayri-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  color: #8b4513;                   /* saddle brown */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.shayri h2 {
+  font-size: 22px;
+  margin-bottom: 6px;
+  color: #8b4513;                   /* dark brown header */
+}
+.shayri p {
+  font-size: 15px;
+  color: #5c4033;                   /* softer brown text */
+  margin-bottom: 12px;
+}
+
+.shayri-paper {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px;
+  margin: 12px 0;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.06);
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.6;
+  font-family: 'Noto Serif', serif;
+  white-space: pre-line;
+  border-left: 4px solid #8b4513;   /* decorative brown edge */
+}
+
+/* Sunflower Section */
+.sunflower {
+  background: #fffbea;              /* soft yellow background */
+  border: 1px solid #f6d8
+  60;        /* golden border */
+}
+.sunflower-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  color: #eab308;                   /* sunflower yellow */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.sunflower h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #d97706;                   /* amber brown */
+}
+.sunflower p {
+  font-size: 15px;
+  margin-bottom: 15px;
+  color: #5a4b2c;
+}
+.sunflower-img {
+  width: 100%;
+  max-width: 350px;   /* controls size */
+  border-radius: 16px;
+  margin-top: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto; /* centers the image */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.sunflower-photo {
+  width: 100%;
+  max-width: 280px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.sunflower-footer {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #6b4f36;       /* brown tone */
+  font-style: italic;
+}
+
+/* Apology in Verse (Purple Theme) */
+.verse {
+  background: #f5e6ff;
+  border: 1px solid #d1b3ff;
+}
+.verse-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  color: #8e44ad;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.verse h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #8e44ad;
+}
+.verse p {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+  white-space: pre-line; /* keeps line breaks */
+}
+
+/* Mini apology cards */
+.apology-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.apology-card {
+  background: #f9fbff;
+  border: 2px solid #d0d8e6;
+  border-radius: 12px;
+  width: 250px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  padding: 10px;
+}
+
+.apology-card p {
+  font-size: 14px;
+  color: #333;
+  margin: 10px 0;
+}
+
+.apology-card img {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+
+/* Footer apology */
+.footer-apology {
+  margin-top: 60px;
+  padding: 40px 20px;
+  text-align: center;
+  background: linear-gradient(180deg, #fff3f8, #ffe6f2);
+  border-top: 3px solid #f5b5d4;
+}
+
+.footer-apology h1 {
+  font-size: 60px;
+  font-weight: bold;
+  color: #d63384;
+  font-family: 'Brush Script MT', cursive;
+  margin: 0;
+}
+
+.footer-apology p {
+  font-size: 22px;
+  color: #a0126a;
+  margin-top: 10px;
+  font-family: 'Georgia', serif;
+}
+
+/* Us Box */
+.us-box {
+  background: #fffef6;
+  border: 2px solid #ddd;
+  border-radius: 15px;
+  width: 600px;
+  max-width: 95%;
+  margin: 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  text-align: center;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.us-box h3 {
+  font-size: 18px;
+  font-weight: normal;
+  color: #333;
+  border: 2px solid #a0a0a0;
+  border-radius: 10px;
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 15px;
+  background: #f9fbff;
+}
+
+.us-box img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.us-box p {
+  font-size: 16px;
+  font-weight: bold;
+  color: #444;
+}
+
+
+.love-box {
+  background: #fff0f6;
+  border: 1px solid #ffb3d9;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;         /* ✅ same size as other cards */
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+
+.love-icon {
+  width: 60px;               /* circle size */
+  height: 60px;
+  background: #fff;           /* white circle */
+  border-radius: 50%;         /* make it circular */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;            /* emoji size */
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* subtle shadow */
+}
+
+.love-box h2 {
+  margin: 0 0 15px 0;
+  font-size: 24px;
+  color: #d63384;
+}
+
+.message-box {
+  margin: 20px auto;
+  padding: 15px;
+  min-height: 50px;
+  border-radius: 12px;
+  background: #ffe6f2;
+  color: #6a1b9a;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.08);
+}
+
+.love-box button {
+  margin-top: 15px;   /* space below the box */
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: #ff66b3;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.love-box button:hover {
+  background: #ff3385;
+  transform: scale(1.05);
+}
+
+
+.bouquet-box {
+  background: #fffaf0;
+  border: 1px solid #ffd9b3;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;          /* ✅ same size as other cards */
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.bouquet-icon {
+  width: 60px;               /* circle size */
+  height: 60px;
+  background: #fff;           /* white circle */
+  border-radius: 50%;         /* make it circular */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;            /* emoji size */
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* subtle shadow */
+}
+
+.bouquet-box h2 {
+  margin: 0 0 15px 0;
+  font-size: 24px;
+  color: #d46a00;
+}
+
+.flower-box {
+  margin: 20px auto;
+  padding: 15px;
+  min-height: 60px;
+  border-radius: 12px;
+  background: #fff0e6;
+  color: #a64b00;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.08);
+  line-height: 1.6;
+}
+
+.bouquet-box button {
+  margin-top: 15px;
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: #ff944d;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bouquet-box button:hover {
+  background: #ff751a;
+  transform: scale(1.05);
+}
+
+
+
+
+
+.audio-box {
+  background: #fff7f0;
+  border: 1px solid #ffb3b3;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.audio-icon {
+  width: 60px;               /* circle size */
+  height: 60px;
+  background: #fff;           /* white circle */
+  border-radius: 50%;         /* make it circular */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;            /* emoji size */
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* subtle shadow */
+}
+
+.audio-box h2 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #e63946;
+}
+
+.audio-box p {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.audio-box button {
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: #ff6b81;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.audio-box button:hover {
+  background: #ff3b5c;
+  transform: scale(1.05);
+}
+.yes-no-box {
+  background: #fff0f6;
+  border: 1px solid #ffb3d9;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  position: relative;
+}
+
+.yesno-icon {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.yes-no-box h2 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #d63384;
+}
+
+.yes-no-box p {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
+}
+
+.buttons-container button {
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#yesBtn {
+  background: #ff66b3;
+  color: #fff;
+}
+
+#yesBtn:hover {
+  background: #ff3385;
+  transform: scale(1.05);
+}
+
+#noBtn {
+  background: #ccc;
+  color: #333;
+}
+
+#noBtn:hover {
+  background: #aaa;
+  transform: scale(1.05);
+}
+
+.response-message {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #6a1b9a;
+}
+
+
+.stars-box {
+  background: #f0f7ff;
+  border: 1px solid #b3d9ff;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.stars-icon {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.stars-box h2 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #3b6cff;
+}
+
+.stars-box p {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: #6a1b9a;
+}
+
+.stars-box button {
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: #3b6cff;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stars-box button:hover {
+  background: #2955cc;
+  transform: scale(1.05);
+}
+
+.star {
+  position: absolute;
+  pointer-events: none;
+  font-size: 16px;
+  animation: floatStar 3s linear forwards, twinkle 1s infinite alternate;
+}
+
+@keyframes floatStar {
+  0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 1; }
+  50% { transform: translateY(-100px) translateX(20px) scale(0.8); opacity: 1; }
+  100% { transform: translateY(-200px) translateX(-10px) scale(1); opacity: 0; }
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+
+.contact-box {
+  background: #f9fef0;
+  border: 1px solid #b3ffb3;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  position: relative;
+}
+
+.contact-icon {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.contact-box h2 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #28a745;
+}
+
+.contact-box p {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: #6a1b9a;
+}
+
+.contact-box button {
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: #28a745;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 8px;
+  transition: all 0.3s ease;
+}
+
+.contact-box button:hover {
+  background: #218838;
+  transform: scale(1.05);
+}
+.love-calc-box {
+  background: #fff0f6;
+  border: 1px solid #ffb3d9;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.love-calc-icon {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.love-calc-box h2 {
+  font-size: 24px;
+  color: #d63384;
+}
+
+.love-calc-box button {
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: #ff66b3;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 10px;
+  transition: all 0.3s ease;
+}
+
+.love-calc-result {
+  font-size: 18px;
+  margin-top: 15px;
+  color: #6a1b9a;
+  font-weight: bold;
+}
+.love-lang-box {
+  background: #f0faff;
+  border: 1px solid #b3d9ff;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.lang-icon {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.love-lang-box h2 {
+  font-size: 24px;
+  color: #3b6cff;
+}
+
+.love-lang-box button {
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: #3b6cff;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.love-lang-box button:hover {
+  background: #2955cc;
+  transform: scale(1.05);
+}
+
+.lang-message {
+  font-size: 20px;
+  color: #6a1b9a;
+  font-weight: bold;
+  min-height: 40px;
+}
+.heartbeat-box {
+  background: #fff0f6;
+  border: 1px solid #ffb3d9;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.heartbeat-icon {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.heartbeat-box h2 {
+  font-size: 24px;
+  color: #d63384;
+}
+
+.heartbeat-box button {
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: #ff66b3;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.heartbeat-box button:hover {
+  background: #ff3385;
+  transform: scale(1.05);
+}
+
+.heart {
+  font-size: 100px;
+  color: #e25555;
+  animation: none;
+  margin-top: 20px;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.3); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+.video-box {
+  background: #f0faff;
+  border: 1px solid #b3d9ff;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.video-icon {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.video-box h2 {
+  font-size: 24px;
+  color: #3b6cff;
+  margin-bottom: 15px;
+}
+
+.video-box button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: #3b6cff;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0 10px;
+  transition: all 0.3s ease;
+}
+
+.video-box button:hover {
+  background: #2955cc;
+  transform: scale(1.05);
+}
+.video-box {
+  background: #f0faff;
+  border: 1px solid #b3d9ff;
+  border-radius: 20px;
+  padding: 30px;
+  width: 700px;
+  max-width: 95%;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.video-icon {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.video-box h2 {
+  font-size: 24px;
+  color: #3b6cff;
+  margin-bottom: 15px;
+}
+
+.video-box button {
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: #3b6cff;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0 10px;
+  transition: all 0.3s ease;
+}
+
+.video-box button:hover {
+  background: #2955cc;
+  transform: scale(1.05);
+}
+
+#startVideoBtn {
+  font-size: 20px;
+  padding: 16px 32px;
+}
+.us-box {
+  background: #fff0f6;
+  border: 1px solid #ffb3d9;
+  border-radius: 20px;
+  padding: 20px;
+  width: 700px;
+  max-width: 95%;
+  margin: 0 auto 40px auto;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.us-box h3 {
+  color: #d63384;
+  margin-bottom: 15px;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  background: #000;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.video-wrapper video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  height: 100%;
+  transform: translate(-50%, -50%) rotate(0deg); /* Adjust rotation here if needed */
+}
+@keyframes shake {
+  0% { transform: translateX(0px); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0px); }
+}
+
+#unlockBtn:hover {
+  background: #ff3385;
+  transform: scale(1.05);
+}
+
+/* Hearts Animation */
+.hearts {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.heart {
+  position: absolute;
+  bottom: -30px;
+  color: #ff66b3;
+  font-size: 20px;
+  opacity: 0.8;
+  animation: float 5s linear infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-400px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0px); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0px); }
+}
+#unlockAudioBtn:hover {
+  background: #ff3385;
+  transform: scale(1.05);
+}
+</style>
+
+</head>
+<body>
+  <h1>Hieeeeeeeeeeeeeeeeeeee,</h1>
+  <p>I’m Sollyyyyy ✨</p>
+
+  <!-- Apology Box -->
+  <div class="card box">
+    <div class="icon">📩</div>
+    <h2>Read My Apology Letter</h2>
+    <p>Click to hear my sincere apology 💖</p>
+    <button onclick="showPopup()">Read Letter</button>
+  </div>
+
+  <!-- Songs Section (Blue) -->
+  <div class="card songs">
+    <div class="songs-icon">🎵</div>
+    <h2>Songs Dedicated To You</h2>
+    <p>Songs that remind me of you ✨</p>
+
+    <div class="song-item">
+      <div class="song-header">
+        <span>🔵 Blue - Yung Kai</span>
+        <button onclick="toggleSong('song1')">▶</button>
+      </div>
+      <audio id="song1" src="songs/blue_yung_kai.mp3"></audio>
+      <div class="progress-container">
+        <span id="current-song1">0:00</span>
+        <input type="range" id="progress-song1" value="0">
+        <span id="duration-song1">0:00</span>
+      </div>
+    </div>
+
+    <div class="song-item">
+      <div class="song-header">
+        <span>🔵 Die with a Smile - Bruno Mars</span>
+        <button onclick="toggleSong('song2')">▶</button>
+      </div>
+      <audio id="song2" src="songs/Die_with_a_smile.mp3"></audio>
+      <div class="progress-container">
+        <span id="current-song2">0:00</span>
+        <input type="range" id="progress-song2" value="0">
+        <span id="duration-song2">0:00</span>
+      </div>
+    </div>
+
+    <div class="song-item">
+      <div class="song-header">
+        <span>🔵 Perfect - Ed Sheeran</span>
+        <button onclick="toggleSong('song3')">▶</button>
+      </div>
+      <audio id="song3" src="songs/perfect.mp3"></audio>
+      <div class="progress-container">
+        <span id="current-song3">0:00</span>
+        <input type="range" id="progress-song3" value="0">
+        <span id="duration-song3">0:00</span>
+      </div>
+    </div>
+
+    <button class="toggle-all" onclick="toggleAllSongs(this, 'songs')">Play All ▶</button>
+  </div>
+
+  <!-- Songs Section (Yellow) -->
+  <div class="card songs-yellow">
+    <div class="songs-icon">🎶</div>
+    <h2>Hehehehehe</h2>
+    <p>Listen Theseee !!</p>
+
+    <div class="song-item">
+      <div class="song-header">
+        <span>🟡 Sorry Sorry - Pawan Singh</span>
+        <button onclick="toggleSong('song4')">▶</button>
+      </div>
+      <audio id="song4" src="songs/sorry_sorry.mp3"></audio>
+      <div class="progress-container">
+        <span id="current-song4">0:00</span>
+        <input type="range" id="progress-song4" value="0">
+        <span id="duration-song4">0:00</span>
+      </div>
+    </div>
+
+    <div class="song-item">
+      <div class="song-header">
+        <span>🟡 Raja Ji Ke Dilwa - Pawan Singh</span>
+        <button onclick="toggleSong('song5')">▶</button>
+      </div>
+      <audio id="song5" src="songs/raja_ji_ke_dilwa.mp3"></audio>
+      <div class="progress-container">
+        <span id="current-song5">0:00</span>
+        <input type="range" id="progress-song5" value="0">
+        <span id="duration-song5">0:00</span>
+      </div>
+    </div>
+
+    <button class="toggle-all" onclick="toggleAllSongs(this, 'songs-yellow')">Play All ▶</button>
+  </div>
+
+  <!-- Overlay and popup -->
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <button class="close-btn" onclick="closePopup()">✖</button>
+    <h2>❤️ Dear Anjali 💜</h2>
+    <div class="letter-box">
+  <p>❝I know I have made mistakes, and I am truly sorry for the hurt I caused you.  
+You mean the world to me, and I want to make things right.  
+Please accept my heartfelt apology and know that I am always here for you.</p>
+
+  <p>Please forgive me for my mistakes.  
+I love you more than words can say.</p>
+</div>
+
+    <div class="signature">
+      <div class="love">With all my love,</div>
+      <div class="name">Yours sincerely,<br> Ashish Kumar</div>
+      <div class="icons">❤️ ✨ 💜</div>
+    </div>
+  </div>
+
+  <!-- Memories Section -->
+<div class="card memories">
+  <div class="memories-icon">🖼️</div>
+  <h2>Memories</h2>
+  <p>Our beautiful moments together 💖</p>
+  <button onclick="openMemories()">Click to See</button>
+</div>
+
+<!-- Memories Popup -->
+<div class="overlay" id="memoriesOverlay"></div>
+<div id="memoriesPopup">
+  <button class="close-btn" onclick="closeMemories()">✖</button>
+  <h2>💛 Our Memories</h2>
+  <img id="memoryImage" src="photos/photo1.jpg" alt="Memory">
+  <div class="memories-controls">
+    <button onclick="prevPhoto()">⬅ Prev</button>
+    <button onclick="nextPhoto()">Next ➡</button>
+  </div>
+</div>
+
+<!-- Shayri Flipbook Section -->
+<div class="card shayri" id="shayriCard">
+  <div class="shayri-icon">🪶</div>
+  <h2>Shayri</h2>
+  <p>दिल की बातें ✨</p>
+
+  <div class="shayri-paper" id="shayriPaper">
+    <!-- content inserted by JS -->
+  </div>
+
+  <div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px;">
+    <button id="shayriPrev" style="padding:8px 14px;border-radius:12px;border:none;background:#e67e22;color:#fff;cursor:pointer;">⬅ Prev</button>
+    <button id="shayriNext" style="padding:8px 14px;border-radius:12px;border:none;background:#e67e22;color:#fff;cursor:pointer;">Next ➡</button>
+  </div>
+</div>
+
+
+
+<!-- Sunflower Section -->
+<!-- Sunflower Section -->
+<div class="card sunflower">
+  <div class="sunflower-icon">🌻</div>
+  <h2>Sunflower</h2>
+  <p>Just like a sunflower, my heart always turns towards you 💛</p>
+  <img src="images/sunflower.jpg" alt="Sunflower" class="sunflower-img">
+  <div class="sunflower-footer">📸 Clicked by me</div>
+</div>
+
+
+<div class="card love-box">
+  <div class="love-icon">💕</div>
+  <h2>LOVE BOX</h2>
+  
+  <!-- Message first -->
+  <div class="message-box" id="loveMessageBox">💌 Tap the button to see my love...</div>
+  
+  <!-- Button below the box -->
+  <button onclick="showLoveMessage()">Click Me</button>
+</div>
+
+
+<!-- 🌹 VIRTUAL BOUQUET -->
+<div class="card bouquet-box">
+  <div class="bouquet-icon">🌹</div>
+  <h2>VIRTUAL BOUQUET</h2>
+
+  <!-- Flower display area -->
+  <div class="flower-box" id="flowerBox">🌱 Tap the button many times as you can</div>
+
+  <!-- Button -->
+  <button onclick="growFlower()">Grow Flower</button>
+</div>
+
+
+<div class="card audio-box">
+  <div class="audio-icon">🎤</div>
+  <h2>Audio Message</h2>
+  <p>Click play to hear my voice 💖</p>
+
+  <!-- Password Input Section -->
+  <div id="audioPasswordSection">
+    <input type="password" id="audioBirthDateInput" placeholder="Enter My Birth Date (DDMMYYYY)" 
+           style="padding: 12px; font-size: 16px; border-radius: 25px; width: 250px; border: 2px solid #ffb3d9; text-align: center; outline: none;">
+    <button id="unlockAudioBtn" onclick="checkAudioPassword()" 
+            style="padding: 12px 24px; border-radius: 25px; background: #ff66b3; color: #fff; border: none; cursor: pointer; font-weight: bold; margin-left: 10px;">
+      🔓 Unlock
+    </button>
+    <p id="audioPasswordMsg" style="margin-top: 10px; color: #d63384; font-weight: bold;"></p>
+  </div>
+
+  <!-- Audio Player (Initially Hidden) -->
+  <div id="audioPlayerContainer" style="display: none; margin-top: 20px;">
+    <button id="playAudioBtn" onclick="toggleAudio()">▶ Play</button>
+    <audio id="audioMessage" src="audio/your_message.mp3"></audio>
+  </div>
+</div>
+
+<!-- ✅❌ Yes/No Apology Box -->
+<div class="card yes-no-box">
+  <div class="yesno-icon">💌</div>
+  <h2>Forgive Me?</h2>
+  <p>Choose wisely ❤️</p>
+  <div class="buttons-container">
+    <button id="yesBtn">Yes, I forgive you 💕</button>
+    <button id="noBtn">No 😢</button>
+  </div>
+  <div class="response-message" id="responseMsg"></div>
+</div>
+
+
+<!-- ✨ Magical Fireflies Box -->
+<div class="card stars-box">
+  <div class="stars-icon">🌟</div>
+  <h2>Magical Fireflies</h2>
+  <p>Click the button to send tiny stars of love 💖</p>
+  <button onclick="spawnStars()">Release Stars ✨</button>
+</div>
+
+<!-- ❤️ Love Calculator Box -->
+<div class="card love-calc-box">
+  <div class="love-calc-icon">💖</div>
+  <h2>Love Calculator</h2>
+  <input type="text" id="yourName" placeholder="Your Name" style="padding:10px; margin: 5px; border-radius:10px;">
+  <input type="text" id="partnerName" placeholder="My Name" style="padding:10px; margin: 5px; border-radius:10px;">
+  <br>
+  <button onclick="calculateLove()">Calculate Love ❤️</button>
+  <div class="love-calc-result" id="loveCalcResult">Enter names to see your love %</div>
+</div>
+
+<!-- 🌍 I Love You in Different Languages Box -->
+<div class="card love-lang-box">
+  <div class="lang-icon">🌐</div>
+  <h2>"I Love You" Around the World</h2>
+  <button onclick="showLoveTranslation()">Show Me 💖</button>
+  <div class="lang-message" id="loveLangMessage">Click the button to see "I Love You" in another language 💕</div>
+</div>
+
+<!-- ❤️ Animated Heartbeat Box -->
+<div class="card heartbeat-box">
+  <div class="heartbeat-icon">💖</div>
+  <h2>My Heart Beats For You</h2>
+  <button onclick="startHeartbeat()">Show Love 💕</button>
+  <div class="heart" id="heart">❤️</div>
+</div>
+
+<div class="card video-box">
+  <div class="video-icon">🎥</div>
+  <h2>Music Videos For You</h2>
+
+  <button id="startVideoBtn" onclick="startVideoPlayer()">▶ Play Music Videos</button>
+
+  <div id="videoPlayerContainer" style="display: none; margin-top: 20px;">
+    <video id="musicVideoPlayer" width="640" height="360" controls>
+      <source src="videos/video1.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <div style="margin-top: 15px;">
+      <button onclick="previousVideo()">⏮️ Previous</button>
+      <button onclick="nextVideo()">⏭️ Next</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- 📞 Contact Me Box -->
+<div class="card contact-box">
+  <div class="contact-icon">📱</div>
+  <h2>Contact Me</h2>
+  <p>Pleasee Contact me Anjali am waiting for youu...:(</p>
+
+  <button onclick="window.location.href='tel:9279129495'">Call Ashish 📲</button>
+  <button onclick="window.location.href='mailto:ashishstar6969@gmail.com'">Email Me ✉️</button>
+  <button onclick="window.open('https://wa.me/919279129495', '_blank')">WhatsApp 💬</button>
+</div>
+
+
+
+
+
+<!-- Mini Apology Cards -->
+<div class="apology-cards">
+  <div class="apology-card">
+    <p>💭 I know I've been distant, and I'm truly sorry...</p>
+    <img src="images/love_you.jpg" alt="Love You">
+    <p>I hope you can forgive me.</p>
+  </div>
+
+  <div class="apology-card">
+    <p>💭 I regret my careless mistakes and the pain they caused.</p>
+    <img src="images/cat_sorry.gif" alt="Sorry Cat">
+    <p>I'm truly sorry and promise to do better.</p>
+  </div>
+
+  <div class="apology-card">
+    <p>💭 I never wanted to hurt you, yet I did unintentionally...</p>
+    <img src="images/crying_cat.jpeg" alt="Sorry Teddy">
+    <p>Please give me another chance to make it right.</p>
+  </div>
+
+  <div class="apology-card">
+    <p>💭 Without you, everything feels incomplete...</p>
+    <img src="images/heart_sorry.jpg" alt="Heart Sorry">
+    <p>You are my everything, please forgive me 💖</p>
+  </div>
+</div>
+
+<div class="apology-cards">
+  <div class="apology-card">
+    <p> 💬 I miss your smile, it brightens my whole world...</p>
+    <img src="images\feliz-cumpleaños.gif" alt="Love You">
+    <p>I hope you can forgive me.</p>
+  </div>
+
+  <div class="apology-card">
+    <p>💭 Every night I think of you, and I regret my mistakes...</p>
+    <img src="images\Screenshot 2025-09-07 021505.png" alt="Sorry Cat">
+    <p>I'm truly sorry and promise to do better.</p>
+  </div>
+
+  <div class="apology-card">
+    <p>💭 I may not be perfect, but my love for you is endless...</p>
+    <img src="images\Screenshot 2025-09-07 021455.png" alt="Sorry Teddy">
+    <p>Please give me another chance to make it right.</p>
+  </div>
+
+  <div class="apology-card">
+    <p>💭 I hate myself for hurting you, my precious...</p>
+    <img src="images\cover.thumb256.webp" alt="Heart Sorry">
+    <p>You are my everything, please forgive me 💖</p>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    // Popup
+    function showPopup() {
+      const overlay = document.getElementById("overlay");
+      const popup = document.getElementById("popup");
+      popup.style.display = "block";
+      overlay.classList.add("show");
+      popup.classList.remove("hide");
+      popup.classList.add("show");
+    }
+    function closePopup() {
+      const overlay = document.getElementById("overlay");
+      const popup = document.getElementById("popup");
+      popup.classList.remove("show");
+      popup.classList.add("hide");
+      overlay.classList.remove("show");
+      setTimeout(() => { popup.style.display = "none"; }, 600);
+    }
+
+    // Format time
+    function formatTime(seconds) {
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      return `${min}:${sec < 10 ? "0" : ""}${sec}`;
+    }
+
+    // Setup audio with progress
+    function setupAudioEvents(id) {
+      const audio = document.getElementById(id);
+      const progress = document.getElementById(`progress-${id}`);
+      const current = document.getElementById(`current-${id}`);
+      const duration = document.getElementById(`duration-${id}`);
+
+      audio.addEventListener("loadedmetadata", () => {
+        duration.textContent = formatTime(audio.duration);
+        progress.max = audio.duration;
+      });
+
+      audio.addEventListener("timeupdate", () => {
+        progress.value = audio.currentTime;
+        current.textContent = formatTime(audio.currentTime);
+      });
+
+      progress.addEventListener("input", () => {
+        audio.currentTime = progress.value;
+      });
+    }
+
+    // Toggle song play/pause
+    function toggleSong(id) {
+      const audio = document.getElementById(id);
+      const btn = audio.previousElementSibling.querySelector("button");
+
+      if (audio.paused) {
+        document.querySelectorAll("audio").forEach(a => a.pause());
+        document.querySelectorAll(".song-header button").forEach(b => b.textContent = "▶");
+        audio.play();
+        btn.textContent = "⏸";
+      } else {
+        audio.pause();
+        btn.textContent = "▶";
+      }
+    }
+
+    // Toggle Play All / Pause All
+    function toggleAllSongs(button, sectionClass) {
+      const audios = document.querySelectorAll(`.${sectionClass} audio`);
+      const isPlaying = button.textContent.includes("Pause");
+
+      audios.forEach(a => {
+        a.pause();
+        a.currentTime = 0;
+        a.previousElementSibling.querySelector("button").textContent = "▶";
+      });
+
+      if (!isPlaying) {
+        let index = 0;
+        function playNext() {
+          if (index < audios.length) {
+            const current = audios[index];
+            const btn = current.previousElementSibling.querySelector("button");
+            current.play();
+            btn.textContent = "⏸";
+            current.onended = () => {
+              btn.textContent = "▶";
+              index++;
+              playNext();
+            };
+          } else {
+            button.textContent = "Play All ▶";
+          }
+        }
+        playNext();
+        button.textContent = "Pause All ⏸";
+      } else {
+        button.textContent = "Play All ▶";
+      }
+    }
+
+    // Setup all audios
+    ["song1","song2","song3","song4","song5"].forEach(setupAudioEvents);
+
+    // Memories popup + slideshow
+const photos = [
+  "photos/photo1.jpg",
+  "photos/photo2.jpg",
+  "photos/photo3.jpg",
+  "photos/photo4.jpg",
+  "photos/photo5.jpg",
+  "photos/photo6.jpg",
+  "photos/photo7.jpg",
+  "photos/photo8.jpg",
+  "photos/photo9.jpg",
+  "photos/photo10.jpg",
+  "photos/photo11.jpg",
+  "photos/photo12.jpg",
+  "photos/photo13.jpg",
+  "photos/photo14.jpg",
+
+];
+let currentIndex = 0;
+const memoryImage = document.getElementById("memoryImage");
+
+function openMemories() {
+  const overlay = document.getElementById("memoriesOverlay");
+  const popup = document.getElementById("memoriesPopup");
+  overlay.classList.add("show");
+  popup.style.display = "block";  
+  popup.classList.remove("hide");
+  popup.classList.add("show");
+}
+
+
+function closeMemories() {
+  const overlay = document.getElementById("memoriesOverlay");
+  const popup = document.getElementById("memoriesPopup");
+  overlay.classList.remove("show");
+  popup.classList.remove("show");
+  popup.classList.add("hide");
+  setTimeout(() => { popup.style.display = "none"; }, 600);
+}
+
+function showPhoto(index) {
+  if (index < 0) index = photos.length - 1;
+  if (index >= photos.length) index = 0;
+  currentIndex = index;
+  memoryImage.classList.add("fade-out");
+  setTimeout(() => {
+    memoryImage.src = photos[currentIndex];
+    memoryImage.classList.remove("fade-out");
+  }, 600);
+}
+function nextPhoto() { showPhoto(currentIndex + 1); }
+function prevPhoto() { showPhoto(currentIndex - 1); }
+
+
+
+  </script>
+  <script>
+  const shayris = [
+    `1.\nतुम बिन ये दिल सुना-सुना सा लगता है,\nहर खुशी अधूरी सी लगती है।\nवापस आ जाओ मेरे पास,\nताकि ये प्यार फिर से पूरा हो जाए।`,
+    `2.\nतेरे बिना सब कुछ फीका-सा लगता है,\nतेरी यादों के साये में ही जीना अच्छा लगता है।\nमोहब्बत की राह में एक बार फिर से लौट आओ,\nताकि मेरा हर लम्हा सिर्फ तुम्हारे नाम हो।`,
+    `4.\nगुज़र गए कई दिन तेरे बिना,\nहर रात तेरी यादों में बीती है।\nवापस आ जाओ, मेरे दिल की तन्हाई मिटा दो,\nतुम बिन ये जिंदगी अधूरी सी लगती है।`
+  ];
+
+  let shayriIndex = 0;
+  const shayriPaper = document.getElementById('shayriPaper');
+  const btnPrev = document.getElementById('shayriPrev');
+  const btnNext = document.getElementById('shayriNext');
+
+  function renderShayri(i) {
+    shayriPaper.innerHTML = `<p><strong>${shayris[i].split('\\n')[0]}</strong><br>` +
+      shayris[i].split('\\n').slice(1).join('<br>') + `</p>`;
+  }
+
+  btnPrev.addEventListener('click', () => {
+    shayriIndex = (shayriIndex - 1 + shayris.length) % shayris.length;
+    renderShayri(shayriIndex);
+  });
+
+  btnNext.addEventListener('click', () => {
+    shayriIndex = (shayriIndex + 1) % shayris.length;
+    renderShayri(shayriIndex);
+  });
+
+  // initial render
+  renderShayri(shayriIndex);
+
+  
+
+</script>
+
+<!-- Us Box -->
+<div class="us-box">
+  <h3>💝 "This is us btw"</h3>
+  <img src="images/us.jpg" alt="This is us">
+  <p>Don't be angryyyyyy .</p>
+</div>
+
+<!-- Us Box -->
+<div class="us-box">
+  <h3>"This is me without you"</h3>
+  <img src="images/me.png" alt="This is us">
+  <p>:(</p>
+</div>
+
+
+<div class="us-box">
+  <h3>"One Precious Message For You !!"</h3>
+
+  <!-- Password Input Section -->
+  <div id="passwordSection" style="margin-top: 20px;">
+    <input type="password" id="birthDateInput" placeholder="Enter My Birth Date (DDMMYYYY)" 
+           style="padding: 14px; font-size: 16px; border-radius: 25px; width: 280px; border: 2px solid #ffb3d9; outline: none; transition: 0.3s; text-align: center;">
+
+    <button id="unlockBtn" onclick="checkPassword()" 
+            style="padding: 14px 28px; margin-left: 12px; border-radius: 25px; background: #ff66b3; color: #fff; border: none; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+      🔓 Unlock
+    </button>
+
+    <p id="passwordMsg" style="margin-top: 12px; color: #d63384; font-weight: bold;"></p>
+  </div>
+
+  <!-- Video (Initially Hidden) -->
+  <div id="videoContainer" style="display: none; position: relative; margin-top: 20px;">
+    <!-- Floating hearts overlay -->
+    <div class="hearts"></div>
+
+    <video id="loveVideo" width="640" height="360" controls 
+           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; z-index: 1;">
+      <source src="myvideo/hehehe.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <p style="margin-top: 20px; font-weight: bold; color: #d63384;">Made With Love for My Anjali ❤️</p>
+</div>
+
+
+<!-- Footer Apology -->
+<div class="footer-apology">
+  <h1>I Am Sorry</h1>
+  <p>I LOVE YOU MUCH MORE ANJALI</p>
+</div>
+
+
+<script>
+const loveMessages = [
+    "You are the reason my heart beats ❤️",
+  "Every moment with you is magical ✨",
+  "My world shines brighter with you 🌎💫",
+  "You are my forever and always 💍",
+  "Your smile is my favorite sunshine 🌞",
+  "With you, love feels effortless 💕",
+  "I fall for you more every day 💖",
+  "You make my heart skip a beat 💓",
+  "Life with you is a dream come true 🌸",
+  "Your love is my greatest treasure 💎",
+  "You are the missing piece of my heart 🧩",
+  "I never want to let you go 🤗",
+  "Being with you feels like home 🏡",
+  "You make ordinary days extraordinary 🌈",
+  "I adore everything about you 🌹",
+  "You are my favorite hello and hardest goodbye 👋💔",
+  "You light up my darkest nights 🌟",
+  "You are my sweetest addiction 🍯",
+  "Loving you is the best choice I ever made ✅",
+  "You make my soul smile 😊",
+  "My heart belongs to you and only you ❤️",
+  "You are my sunshine on rainy days 🌧️☀️",
+  "Your hugs are my safe place 🤗",
+  "You are my happily ever after 📖✨",
+  "I crave your smile every moment 😍",
+  "With you, forever isn’t long enough ⏳",
+  "You’re my reason to believe in love again 💕",
+  "I want to hold your hand forever ✋❤️",
+  "You make my heart sing 🎶💖",
+  "You are my sweetest dream 💤🌙",
+  "You are the love story I always wanted 📖💞",
+  "I love the way you look at me 👀❤️",
+  "You’re my partner in every adventure 🗺️",
+  "You’re my soulmate and best friend 💞",
+  "Your laugh is my favorite sound 🎵",
+  "You are the star of my universe 🌌",
+  "You’re the answer to all my prayers 🙏❤️",
+  "I love you to the moon and back 🌙🚀",
+  "You’re my everything, today and always 💝",
+  "When I’m with you, nothing else matters 🌎",
+  "You’re my sweetest forever 💍",
+  "I am lucky to have you in my life 🍀",
+  "You’re my favorite place to be 🏡💕",
+  "Your love is my guiding light 🔦❤️",
+  "You are my greatest blessing 🙌💖",
+  "You make my life complete 🧩💞",
+  "You’re the sparkle in my eyes ✨",
+  "I’ll never stop loving you 💯❤️",
+  "You are my heart, my soul, my everything 💕"
+];
+let loveIndex = 0;
+
+function showLoveMessage() {
+  const box = document.getElementById("loveMessageBox");
+  box.textContent = loveMessages[loveIndex];
+  loveIndex = (loveIndex + 1) % loveMessages.length;
+}
+</script>
+
+
+
+<script>
+const flowers = ["🌷","🌸","🌼","🌹","🌻","💐","🌺"];
+let flowerIndex = 0;
+
+function growFlower() {
+  const box = document.getElementById("flowerBox");
+
+  // First click replaces seedling 🌱
+  if (box.textContent.includes("🌱")) {
+    box.textContent = flowers[flowerIndex];
+  } else {
+    box.textContent += " " + flowers[flowerIndex];
+  }
+
+  flowerIndex = (flowerIndex + 1) % flowers.length;
+}
+</script>
+
+<script>
+const audio = document.getElementById("audioMessage");
+const playBtn = document.getElementById("playAudioBtn");
+
+function toggleAudio() {
+  if(audio.paused){
+    audio.play();
+    playBtn.textContent = "⏸ Pause";
+  } else {
+    audio.pause();
+    playBtn.textContent = "▶ Play";
+  }
+
+  audio.onended = () => {
+    playBtn.textContent = "▶ Play";
+  };
+}
+</script>
+
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const responseMsg = document.getElementById("responseMsg");
+
+noBtn.addEventListener("mouseenter", () => {
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
+  const pageWidth = window.innerWidth - btnWidth - 20;
+  const pageHeight = window.innerHeight - btnHeight - 20;
+
+  const randX = Math.floor(Math.random() * pageWidth);
+  const randY = Math.floor(Math.random() * pageHeight);
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = randX + "px";
+  noBtn.style.top = randY + "px";
+});
+
+yesBtn.addEventListener("click", () => {
+  responseMsg.textContent = "Thank you for forgiving me! 💕";
+  // Reset No button position to normal
+  noBtn.style.position = "static";
+});
+</script>
+
+
+<script>
+function spawnStars() {
+  const box = document.querySelector(".stars-box");
+  const colors = ["#ff66b3","#ffcc66","#66ccff","#ff6666","#cc66ff"];
+  const numStars = 12; // stars per click
+
+  for (let i = 0; i < numStars; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    star.textContent = "✨";
+
+    // Random size and color
+    const size = Math.random() * 12 + 12; // 12px to 24px
+    star.style.fontSize = size + "px";
+    star.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+    // Random horizontal position
+    star.style.left = Math.random() * (box.offsetWidth - 20) + "px";
+    star.style.top = box.offsetHeight - 30 + "px"; // start near bottom
+
+    // Randomize float animation duration
+    star.style.animationDuration = (2 + Math.random() * 2) + "s";
+
+    box.appendChild(star);
+
+    // Remove star after animation
+    setTimeout(() => star.remove(), 4000);
+  }
+}
+
+</script>
+<script>
+function calculateLove() {
+  const yourName = document.getElementById('yourName').value.trim();
+  const partnerName = document.getElementById('partnerName').value.trim();
+  if (yourName === '' || partnerName === '') {
+    document.getElementById('loveCalcResult').textContent = "Please fill both names ❤️";
+    return;
+  }
+
+  // Generate random love percentage between 90 and 101
+  const lovePercent = Math.floor(Math.random() * 12) + 90;  // 90 to 101
+
+  document.getElementById('loveCalcResult').textContent = `${yourName} ❤️ ${partnerName} = ${lovePercent}% Love`;
+}
+</script>
+<script>
+const loveTranslations = [
+  'I Love You ❤️ (English)',
+  'Je t\'aime 💕 (French)',
+  'Ti amo 🌹 (Italian)',
+  'Ich liebe dich 💗 (German)',
+  'Te amo 💖 (Spanish)',
+  '愛してる ❤️ (Japanese)',
+  '사랑해요 💞 (Korean)',
+  'Я тебя люблю 💝 (Russian)',
+  'Aku cinta kamu 💘 (Indonesian)',
+  'Eu te amo 🌸 (Portuguese)',
+  'أنا أحبك 💓 (Arabic)',
+  'मैं तुमसे प्यार करता हूँ 💟 (Hindi)',
+  'ฉันรักคุณ 💗 (Thai)',
+  'Jeg elsker dig 💕 (Danish)',
+  'Ik hou van jou ❤️ (Dutch)',
+  'Mahal kita 💖 (Filipino)',
+  'Te iubesc 💝 (Romanian)',
+  'Aš tave myliu 🌹 (Lithuanian)',
+  'Eg elska deg ❤️ (Norwegian)',
+  'Rakastan sinua 💘 (Finnish)',
+  'Szeretlek 💕 (Hungarian)',
+  'Volim te 💖 (Serbian)',
+  'Kocham cię 💓 (Polish)',
+  'Taim i’ngra leat ❤️ (Irish)',
+  'Te dua 💞 (Albanian)',
+  'Nakupenda 💝 (Swahili)',
+  'Tebrikler seni seviyorum 💖 (Turkish)',
+  'Ich lieb dich 🌸 (Austrian German)',
+  'Szeretlek ❤️ (Hungarian)',
+  'Minä rakastan sinua 💗 (Finnish)',
+  'Eg elski teg 🌹 (Faroese)',
+  'Naku penda 💘 (Swahili)',
+  'Wo ai ni ❤️ (Mandarin Chinese)',
+  'Te quiero 💝 (Spanish - informal)',
+  'Miluji tě 💖 (Czech)',
+  'Jeg elsker deg 🌟 (Norwegian Bokmål)',
+  'Aloha wau iā ʻoe 🌺 (Hawaiian)',
+  'Ik hou van jou 💕 (Dutch)',
+  'Nakupenda sana 💗 (Swahili)',
+  'Volim te 💓 (Croatian)',
+  'Minä rakastan sinua 💖 (Finnish)',
+  'Ti voglio bene ❤️ (Italian - friend/family)',
+  'אני אוהב אותך 💝 (Hebrew)',
+  'אני אוהבת אותך 💗 (Hebrew feminine)',
+  'मैं तुझसे प्यार करता हूँ 💘 (Hindi masculine)',
+  'मैं तुझसे प्यार करती हूँ 💓 (Hindi feminine)',
+  'T’estimo molt 💞 (Catalan)',
+  'Я вас люблю 💖 (Formal Russian)',
+  'Ég elska þig ❤️ (Icelandic)',
+  'Mi amas vin 💝 (Esperanto)'
+];
+
+function showLoveTranslation() {
+  const msg = loveTranslations[Math.floor(Math.random() * loveTranslations.length)];
+  document.getElementById('loveLangMessage').textContent = msg;
+}
+</script>
+
+
+<script>
+function startHeartbeat() {
+  const heart = document.getElementById('heart');
+  heart.style.animation = 'heartbeat 1s infinite';
+}
+</script>
+
+
+
+<script>
+const videos = [
+  'videos/gata_only.mp4',
+  'videos/avan_jawan.mp4',
+  'videos/dil_jo_tumhara_hai.mp4',
+  'videos2/i_wanna_be_yours.mp4',
+  'videos2/sahiba.mp4',
+  'videos2/tere_aage_hai_ye_duniya_feeki_si.mp4',
+  'videos2/thumak_thumak.mp4',
+  'videos/me_gustas.mp4'
+];
+
+let currentVideoIndex = 0;
+
+function startVideoPlayer() {
+  document.getElementById('startVideoBtn').style.display = 'none';
+  document.getElementById('videoPlayerContainer').style.display = 'block';
+  updateVideo();
+}
+
+function updateVideo() {
+  const player = document.getElementById('musicVideoPlayer');
+  player.src = videos[currentVideoIndex];
+  player.play();
+}
+
+function previousVideo() {
+  currentVideoIndex = (currentVideoIndex - 1 + videos.length) % videos.length;
+  updateVideo();
+}
+
+function nextVideo() {
+  currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+  updateVideo();
+}
+</script>
+
+<script>
+const correctPassword = "05032007"; // Replace with your birth date
+
+function checkPassword() {
+  const input = document.getElementById('birthDateInput').value;
+  const msg = document.getElementById('passwordMsg');
+  const videoContainer = document.getElementById('videoContainer');
+  const video = document.getElementById('loveVideo');
+  const passwordSection = document.getElementById('passwordSection');
+
+  if(input === correctPassword) {
+    passwordSection.style.display = 'none';
+    videoContainer.style.display = 'block';
+    createHearts(); // Start hearts animation
+    video.play();
+  } else {
+    msg.textContent = "Incorrect birth date. Please try again 😢";
+    const inputField = document.getElementById('birthDateInput');
+    inputField.style.animation = "shake 0.3s";
+    setTimeout(() => { inputField.style.animation = ""; }, 300);
+  }
+}
+
+// Generate floating hearts
+function createHearts() {
+  const heartsContainer = document.querySelector(".hearts");
+  for(let i = 0; i < 30; i++){
+    let heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.animationDelay = (Math.random() * 3) + "s";
+    heart.style.fontSize = (Math.random() * 20 + 12) + "px";
+    heartsContainer.appendChild(heart);
+  }
+}
+</script>
+
+<script>
+const correctAudioPassword = "05032007"; // replace with your birth date
+
+function checkAudioPassword() {
+  const input = document.getElementById('audioBirthDateInput').value;
+  const msg = document.getElementById('audioPasswordMsg');
+  const passwordSection = document.getElementById('audioPasswordSection');
+  const audioContainer = document.getElementById('audioPlayerContainer');
+  const audio = document.getElementById('audioMessage');
+
+  if(input === correctAudioPassword){
+    passwordSection.style.display = 'none';
+    audioContainer.style.display = 'block';
+  } else {
+    msg.textContent = "Incorrect birth date. Please try again 😢";
+    // shake animation
+    const inputField = document.getElementById('audioBirthDateInput');
+    inputField.style.animation = "shake 0.3s";
+    setTimeout(() => { inputField.style.animation = ""; }, 300);
+  }
+}
+
+function toggleAudio() {
+  const audio = document.getElementById('audioMessage');
+  const btn = document.getElementById('playAudioBtn');
+  if(audio.paused){
+    audio.play();
+    btn.textContent = "⏸ Pause";
+  } else {
+    audio.pause();
+    btn.textContent = "▶ Play";
+  }
+}
+</script>
+
+</body>
+</html>
